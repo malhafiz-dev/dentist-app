@@ -73,6 +73,11 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("USERNAME", currentUsername)
             startActivity(intent)
         }
+
+        binding.buttonAskTootie.setOnClickListener {
+            val intent = Intent(this, ChatbotActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupImageSlider() {

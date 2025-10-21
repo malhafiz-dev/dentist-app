@@ -7,10 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
 
-    // PENTING: Ganti dengan alamat IP server Anda!
-    private const val BASE_URL = "http://10.194.82.186:8080/API_Dentist_App/"
-
-    // URL Dasar untuk gambar. Pastikan path ini benar.
+    // --- Konfigurasi API yang sudah ada ---
+    private const val BASE_URL = "http://10.161.37.130:80/API_Dentist_App/"
     const val IMAGE_BASE_URL = BASE_URL
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -28,4 +26,26 @@ object ApiClient {
         .build()
 
     val userService: UserService = retrofit.create(UserService::class.java)
+
+
+    // --- Konfigurasi BARU untuk API Chatbot ---
+
+    // PENTING: Pastikan alamat IP ini adalah alamat IP lokal komputer Anda
+    private const val CHATBOT_BASE_URL = "http://10.161.37.130:5000/"
+
+    // Kita bisa menggunakan logging interceptor yang sama
+    private val chatClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .build()
+
+    private val chatRetrofit = Retrofit.Builder()
+        .baseUrl(CHATBOT_BASE_URL)
+        .client(chatClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    // Instance service yang akan dipanggil dari repository
+    val chatApiService: ChatApiService by lazy {
+        chatRetrofit.create(ChatApiService::class.java)
+    }
 }
