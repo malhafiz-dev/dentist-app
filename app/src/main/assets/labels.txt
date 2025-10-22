@@ -1,6 +1,5 @@
 Calculus
 Caries
 Gingivitis
-hypodontia
-Mouth Ulcer
 Tooth Discoloration
+Mouth Ulcer
