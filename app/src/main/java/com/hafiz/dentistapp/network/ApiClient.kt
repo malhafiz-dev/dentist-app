@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object ApiClient {
 
     // --- Konfigurasi API yang sudah ada ---
-    private const val BASE_URL = "http://10.161.37.130:80/API_Dentist_App/"
+    private const val BASE_URL = "http://10.194.82.186:8080/API_Dentist_App/"
     const val IMAGE_BASE_URL = BASE_URL
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -31,7 +31,7 @@ object ApiClient {
     // --- Konfigurasi BARU untuk API Chatbot ---
 
     // PENTING: Pastikan alamat IP ini adalah alamat IP lokal komputer Anda
-    private const val CHATBOT_BASE_URL = "http://10.161.37.130:5000/"
+    private const val CHATBOT_BASE_URL = "http://10.194.82.186:5000/"
 
     // Kita bisa menggunakan logging interceptor yang sama
     private val chatClient = OkHttpClient.Builder()
