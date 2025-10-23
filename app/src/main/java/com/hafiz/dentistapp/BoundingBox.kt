@@ -1,5 +1,9 @@
 package com.hafiz.dentistapp
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class BoundingBox(
     val x1: Float,
     val y1: Float,
@@ -12,4 +16,4 @@ data class BoundingBox(
     val cnf: Float,
     val cls: Int,
     val clsName: String
-)
+) : Parcelable

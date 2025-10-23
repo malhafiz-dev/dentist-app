@@ -1,6 +1,7 @@
 package com.hafiz.dentistapp
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,12 @@ class ResultActivity : AppCompatActivity() {
 
         val imagePath = intent.getStringExtra(EXTRA_IMAGE_PATH)
         val diseaseType = intent.getStringExtra(EXTRA_DISEASE_TYPE)
+        val boundingBoxes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableArrayListExtra(EXTRA_BOUNDING_BOXES, BoundingBox::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableArrayListExtra(EXTRA_BOUNDING_BOXES)
+        }
         val timestamp = intent.getStringExtra("TIMESTAMP")
         currentUserId = intent.getIntExtra("USER_ID", -1)
         currentUsername = intent.getStringExtra("USERNAME")
@@ -44,6 +51,15 @@ class ResultActivity : AppCompatActivity() {
         }
 
         binding.resultText.text = diseaseType ?: "Tidak ada hasil"
+
+        if (boundingBoxes != null && boundingBoxes.isNotEmpty()) {
+            val averageConfidence = boundingBoxes.map { it.cnf }.average()
+            binding.accuracyText.text = "${String.format("%.2f", averageConfidence * 100)}%"
+        } else {
+            binding.accuracyText.text = "N/A"
+        }
+        binding.accuracyLabel.text = "Confidence Score"
+
         binding.summaryText.text = getSummaryForDisease(diseaseType, timestamp)
 
         binding.homepageButton.setOnClickListener {
@@ -60,6 +76,7 @@ class ResultActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_IMAGE_PATH = "extra_image_path"
         const val EXTRA_DISEASE_TYPE = "extra_disease_type"
+        const val EXTRA_BOUNDING_BOXES = "extra_bounding_boxes"
 
         fun getSummaryForDisease(disease: String?, timestamp: String?): String {
             val detectionDate = "Deteksi dilakukan pada: ${timestamp ?: "Tidak diketahui"}"

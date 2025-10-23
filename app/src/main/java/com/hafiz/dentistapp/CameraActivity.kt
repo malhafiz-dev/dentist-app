@@ -5,8 +5,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.ImageDecoder
 import android.graphics.Matrix
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -55,6 +59,11 @@ class CameraActivity : AppCompatActivity(), Detector.DetectorListener {
     private var lastBoundingBoxes: List<BoundingBox> = emptyList()
     private var currentUserId: Int = -1
     private var currentUsername: String? = null
+    private var isFromGallery = false
+
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let { processGalleryImage(it) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +91,30 @@ class CameraActivity : AppCompatActivity(), Detector.DetectorListener {
         binding.switchCameraButton.setOnClickListener {
             isFrontCamera = !isFrontCamera
             startCamera()
+        }
+
+        binding.galleryButton.setOnClickListener {
+            galleryLauncher.launch("image/*")
+        }
+    }
+
+    private fun processGalleryImage(uri: Uri) {
+        try {
+            val bitmap = if (Build.VERSION.SDK_INT < 28) {
+                MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
+            } else {
+                val source = ImageDecoder.createSource(this.contentResolver, uri)
+                ImageDecoder.decodeBitmap(source)
+            }.copy(Bitmap.Config.ARGB_8888, true)
+
+            synchronized(this) {
+                lastDetectedBitmap = bitmap
+            }
+            isFromGallery = true
+            detector.detect(bitmap)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Gagal memuat gambar dari galeri", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -157,6 +190,11 @@ class CameraActivity : AppCompatActivity(), Detector.DetectorListener {
                 lastDetectedType = boundingBoxes.firstOrNull()?.clsName
                 lastBoundingBoxes = boundingBoxes
             }
+
+            if (isFromGallery) {
+                saveDetectionResult()
+                isFromGallery = false
+            }
         }
     }
 
@@ -166,6 +204,10 @@ class CameraActivity : AppCompatActivity(), Detector.DetectorListener {
             synchronized(this) {
                 lastDetectedType = null
                 lastBoundingBoxes = emptyList()
+            }
+            if (isFromGallery) {
+                Toast.makeText(this, "Tidak ada penyakit yang terdeteksi pada gambar yang dipilih.", Toast.LENGTH_SHORT).show()
+                isFromGallery = false
             }
         }
     }
@@ -212,6 +254,7 @@ class CameraActivity : AppCompatActivity(), Detector.DetectorListener {
                     val intent = Intent(this@CameraActivity, ResultActivity::class.java).apply {
                         putExtra(ResultActivity.EXTRA_IMAGE_PATH, file.absolutePath)
                         putExtra(ResultActivity.EXTRA_DISEASE_TYPE, typeToSave)
+                        putParcelableArrayListExtra(ResultActivity.EXTRA_BOUNDING_BOXES, ArrayList(bboxesToSave))
                         putExtra("USER_ID", currentUserId)
                         putExtra("USERNAME", currentUsername)
                         putExtra("TIMESTAMP", timestamp)
