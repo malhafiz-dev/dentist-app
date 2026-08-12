@@ -21,10 +21,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="REMOVED_GOOGLE_MAPS_API_KEY" />
-
         <activity
             android:name=".FasyankesActivity"
             android:exported="false" />
