@@ -6,7 +6,7 @@ Android application for detecting common dental conditions using a YOLOv8-based 
 
 Dentist App is an Android application developed as part of a collaborative Capstone Project in the Informatics undergraduate program at Universitas Andalas.
 
-The application is designed to help users identify several common dental conditions through image-based detection. It integrates a YOLOv8 object detection model into an Android application and also provides a chatbot feature for dental-related information.
+The application is designed to help users identify several common dental conditions through image-based detection. It integrates a YOLOv8 object detection model into an Android application and provides additional features such as user authentication, dental examination history, healthcare facility information, and a dental-related chatbot.
 
 The project was developed by a three-member team with different responsibilities across mobile application development, computer vision, and chatbot development.
 
@@ -50,11 +50,11 @@ The application consists of the following main pages:
 
 As a member of the development team, my primary responsibilities included:
 
-- Developing the Android application frontend using Kotlin.
-- Developing the application backend and supporting application logic.
-- Integrating the YOLOv8 detection model into the Android application.
+- Developing the Android frontend and application logic using Kotlin.
+- Implementing application features and user interface flows.
+- Integrating the YOLOv8 detection model into the Android application using TensorFlow Lite.
+- Implementing API integration for user authentication, dental examination history, and application data.
 - Connecting the mobile application with the dental detection functionality.
-- Implementing application features required for the capstone project.
 
 ## Team
 
@@ -62,7 +62,7 @@ The project was developed by a three-member team with the following responsibili
 
 | Role | Responsibility |
 | --- | --- |
-| Mobile Application Developer | Android frontend, backend, and YOLOv8 model integration |
+| Mobile Application Developer | Android frontend, application logic, API integration, and YOLOv8/TensorFlow Lite integration |
 | Computer Vision Developer | YOLOv8 model development and training |
 | Chatbot Developer | Chatbot model and chatbot feature development |
 
@@ -71,19 +71,33 @@ The project was developed by a three-member team with the following responsibili
 ### Mobile Development
 
 - Kotlin
-- Android Studio
 - Android SDK
+- Android Studio
+- XML Layout
+- View Binding
+- RecyclerView
+- CameraX
 
 ### Machine Learning
 
 - YOLOv8
+- TensorFlow Lite
 - Computer Vision
 - Object Detection
 
-### Backend
+### Networking & API
 
-- Backend services
-- REST API integration
+- Retrofit
+- OkHttp
+- Gson
+- REST API
+
+### UI & Supporting Libraries
+
+- Material Components
+- Glide
+- ViewPager2
+- Google Maps SDK
 
 ### Development Tools
 
@@ -93,11 +107,6 @@ The project was developed by a three-member team with the following responsibili
 
 ## Application Preview
 
-Screenshots of the application interface will be added to this section.
-
-
-Suggested screenshots:
-
 ### Authentication
 
 <p align="center">
@@ -106,6 +115,7 @@ Suggested screenshots:
 </p>
 
 ### Main Application
+
 <p align="center">
   <img width="200" alt="Homepage" src="https://github.com/user-attachments/assets/2a2598bc-f3d4-49d9-bb80-5c203a5757f4" />
   <img width="200" alt="Dental Scan" src="https://github.com/user-attachments/assets/0bf31049-d9ea-4eba-9872-0fcefd154ec4" />
@@ -125,7 +135,6 @@ Suggested screenshots:
 <p align="center">
   <img width="200" alt="Chatbot" src="https://github.com/user-attachments/assets/b3a45600-7d7c-4d83-9a44-21b9a66cf0a2" />
 </p>
-
 
 ## Project Structure
 
@@ -166,9 +175,10 @@ The project is maintained as an academic and portfolio project demonstrating And
 Through this project, I gained practical experience in:
 
 - Android application development using Kotlin.
-- Frontend and backend development for mobile applications.
+- Frontend development and application logic for mobile applications.
+- REST API integration in Android applications.
 - Integrating machine learning models into mobile applications.
-- Working with YOLOv8 for object detection.
+- Working with YOLOv8 and TensorFlow Lite for object detection.
 - Developing applications collaboratively in a team.
 - Connecting application components with machine learning functionality.
 
